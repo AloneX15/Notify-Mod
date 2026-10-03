@@ -1,0 +1,48 @@
+site_name: Notify Mod Wiki
+site_description: Documentación de las funciones disponibles de Notify Mod / Implemented features and reference
+site_url: https://alonex15.github.io/Notify-Mod/
+repo_url: https://github.com/AloneX15/Notify-Mod
+repo_name: AloneX15/Notify-Mod
+edit_uri: edit/main/docs/
+copyright: Creado por TakumiStudios. Código MIT; consultar los créditos de cada recurso.
+strict: true
+theme:
+  name: mkdocs
+  color_mode: auto
+  user_color_mode_toggle: true
+  navigation_depth: 3
+plugins:
+  - search:
+      lang: [es, en]
+markdown_extensions:
+  - tables
+  - fenced_code
+  - admonition
+  - toc:
+      permalink: true
+validation:
+  nav:
+    omitted_files: warn
+  links:
+    not_found: warn
+    anchors: warn
+    unrecognized_links: warn
+nav:
+  - Inicio / Home: index.md
+  - Español:
+      - Primeros pasos: es/primeros-pasos.md
+      - Configuración y permisos: es/configuracion.md
+      - Plantillas: es/plantillas.md
+      - Presentaciones y medios: es/presentaciones.md
+      - Disparadores: es/disparadores.md
+      - Desarrollo y publicación: es/desarrollo.md
+  - English:
+      - Getting started: en/getting-started.md
+      - Configuration and permissions: en/configuration.md
+      - Templates: en/templates.md
+      - Presentations and media: en/presentations.md
+      - Triggers: en/triggers.md
+      - Development and publishing: en/development.md
+  - Decisiones / Decisions:
+      - Animated media ADR: adr/0001-formatos-animados-fase-0.md
+      - Registro de errores: registro-de-errores.md

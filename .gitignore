@@ -34,6 +34,11 @@ Thumbs.db
 # Skills locales de IA (no forman parte del mod)
 /skills/
 
+# Wiki generated files and local Python environment
+site/
+.venv-docs/
+__pycache__/
+
 # Logs locales
 *-log.txt
 

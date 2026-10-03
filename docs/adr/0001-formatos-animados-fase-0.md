@@ -1,5 +1,10 @@
 # ADR 0001: Formatos animados (GIF, WebP y Lottie). Puerta de decisión de la Fase 0
 
+> Registro histórico de la prueba de viabilidad. Las referencias a trabajo pendiente describen ese momento:
+> la decodificación en segundo plano y la caché LRU se implementaron en la fase 3.
+> `/notify validate` todavía no consulta el decodificador del cliente; los avisos de medios aparecen en su log.
+> El comportamiento actual está en [presentaciones](../es/presentaciones.md).
+
 - **Estado:** aceptada
 - **Fecha:** 2026-10-03
 - **Contexto en el plan:** §9 (tubería de medios), §27 Fase 0, decisión abierta D6

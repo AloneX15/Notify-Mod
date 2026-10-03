@@ -2,6 +2,9 @@
 
 ## Sin publicar
 
+- Wiki es/en con instalación, configuración, permisos, plantillas, presentaciones, disparadores y desarrollo;
+  generación estricta con MkDocs, capturas de los tests y despliegue opcional en GitHub Pages.
+
 - Fase 4 (primer bloque, todavía incompleta): registro validado de disparadores, eventos de muerte/reaparición,
   entrada/salida, chat, ciclo de vida y lanzamiento manual; audiencias, filtros, cooldowns y límites; comandos
   `/notify trigger`; estado persistente y auditoría; ejemplo de muerte desactivado y documentación es/en.

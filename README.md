@@ -7,12 +7,12 @@
 
 A data-driven engine for cinematic presentations and on-screen notifications: chat messages, HUD cards and full-screen showcases.
 
-> 🚧 **En desarrollo (Fases 1 a 3 terminadas: núcleo, motor de líneas de tiempo y tubería de medios).** El diseño completo está en
-> [`NotifyMod_Plan.md`](NotifyMod_Plan.md). Formato de las presentaciones: [`docs/es/presentaciones.md`](docs/es/presentaciones.md).
+> 🚧 **En desarrollo: fases 0–3 implementadas y fase 4 parcial.** El alcance disponible está en la
+> [wiki bilingüe](docs/index.md). [`NotifyMod_Plan.md`](NotifyMod_Plan.md) describe también funciones futuras.
 
 ## Características
 
-Previstas para la 1.0:
+Disponibles ahora:
 
 - **Tres canales:** chat (MOTD), tarjetas de esquina en el HUD y *Showcase* (presentaciones cinemáticas).
 - **Colocación** en 7 posiciones (centro, esquinas, arriba y abajo) con versión compacta del Showcase.
@@ -20,9 +20,27 @@ Previstas para la 1.0:
 - **Formatos:** PNG, spritesheets `.mcmeta`, GIF, WebP y Lottie (un subconjunto: formas, rellenos, trazos y
   transformaciones; ver [ADR 0001](docs/adr/0001-formatos-animados-fase-0.md)).
 - **Prioridades y cola** (LOW, NORMAL, HIGH, CRITICAL) con caducidad y deduplicación.
-- **Disparadores** automáticos (todos desactivados por defecto) y **audiencias** por grupo de LuckPerms.
-- **Menú de administración** guiado dentro del juego y **API de Java** para otros mods.
+- **Primeros disparadores** automáticos, desactivados por defecto, con comandos, audiencias, filtros, límites y auditoría.
+- Grupos de LuckPerms mediante la API de permisos de Fabric; **integración real todavía sin verificar**.
 - El servidor solo envía ids y argumentos; el cliente compone y dibuja. **Cliente obligatorio.**
+
+Pendientes: resto del catálogo de disparadores, menú de administración, API pública, variables compartidas,
+accesibilidad completa, pack de referencia y escenas. Esta versión no es el lanzamiento 1.0.
+
+## Documentación y wiki
+
+La wiki vive en [`docs/`](docs/index.md), junto al código, y se genera con MkDocs:
+
+- [Primeros pasos](docs/es/primeros-pasos.md) / [Getting started](docs/en/getting-started.md).
+- [Configuración y permisos](docs/es/configuracion.md) / [Configuration](docs/en/configuration.md).
+- [Plantillas](docs/es/plantillas.md) / [Templates](docs/en/templates.md).
+- [Presentaciones](docs/es/presentaciones.md) / [Presentations](docs/en/presentations.md).
+- [Disparadores](docs/es/disparadores.md) / [Triggers](docs/en/triggers.md).
+- [Desarrollo, CI y publicación de la wiki](docs/es/desarrollo.md) / [Development](docs/en/development.md).
+
+La CI valida enlaces y genera el artifact `wiki-html` con las capturas de cliente más recientes.
+GitHub Pages se habilita con su configuración de Actions y la variable `DOCS_PUBLISH=true`;
+los pasos están en la guía de desarrollo.
 
 ## Instalación
 

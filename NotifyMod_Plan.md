@@ -1,6 +1,6 @@
 # Notify Mod: documento de diseño (Fabric · Minecraft 26.x+)
 
-> **Estado:** Diseño aprobado. Fases 0 a 3 implementadas (preparación, núcleo, motor de líneas de tiempo y tubería de medios); siguiente: Fase 4 (disparadores).
+> **Estado:** Diseño aprobado. Fases 0 a 3 implementadas. Fase 4 en progreso: marco y primeros eventos, comandos, límites y persistencia. Primera wiki es/en y generación en CI disponibles; la fase 8 sigue parcial porque falta el pack de referencia completo y el resto de tutoriales. Las fases 5–7 y 9–10 siguen pendientes. Alcance disponible: [wiki](docs/index.md) y [disparadores](docs/es/disparadores.md).
 > **Nombre:** Notify Mod · **Autor:** TakumiStudios · **modid:** `notifymod` · **Paquete Java:** `com.takumistudios.notifymod` · **Comando:** `/notify`
 > **Tipo:** Framework de interfaz, utilidad de servidor y librería para otros mods.
 > *El motor de presentaciones cinemáticas e interfaces temporales para Minecraft Fabric.*
