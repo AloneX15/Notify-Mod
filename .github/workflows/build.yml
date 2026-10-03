@@ -62,7 +62,9 @@ jobs:
               for (const f of fs.readdirSync(dir).filter(f => f.endsWith(".json") && f !== "en_us.json")) {
                 const keys = new Set(Object.keys(load(f)));
                 const missing = base.filter(k => !keys.has(k));
+                const extra = [...keys].filter(k => !base.includes(k));
                 if (missing.length) { console.log(`::error file=${dir}/${f}::faltan ${missing.length} claves: ${missing.slice(0, 10).join(", ")}`); fail = true; }
+                if (extra.length) { console.log(`::error file=${dir}/${f}::sobran ${extra.length} claves: ${extra.slice(0, 10).join(", ")}`); fail = true; }
               }
             }
             process.exit(fail ? 1 : 0);
@@ -168,12 +170,70 @@ jobs:
           path: versions/${{ matrix.minecraft }}/build/run/clientGameTest/logs/
           if-no-files-found: ignore
 
+  docs:
+    name: Build bilingual wiki
+    needs: [standards, client]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: requirements-docs.txt
+
+      - name: Install wiki dependencies
+        run: python -m pip install -r requirements-docs.txt
+
+      - uses: actions/download-artifact@v8
+        with:
+          name: screenshots-mc26.3
+          path: build-doc-screenshots
+
+      - name: Refresh screenshots from verified client tests
+        run: python scripts/docs_assets.py --screenshots build-doc-screenshots
+
+      - name: Build wiki and validate links
+        run: python -m mkdocs build --strict
+
+      - name: Upload browsable HTML
+        uses: actions/upload-artifact@v7
+        with:
+          name: wiki-html
+          path: site/
+          if-no-files-found: error
+
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: site/
+
+  deploy-docs:
+    name: Publish wiki to GitHub Pages
+    if: ${{ vars.DOCS_PUBLISH == 'true' && github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') }}
+    needs: [docs, test]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    concurrency:
+      group: github-pages
+      cancel-in-progress: false
+    steps:
+      - uses: actions/deploy-pages@v5
+        id: deployment
+
   dev-release:
     name: Publish dev build
     # Solo en pushes a main y solo si todas las pruebas pasaron
     if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
     # Sin test de cliente: needs: [standards, test]
-    needs: [standards, test, client]
+    needs: [standards, test, client, docs]
     runs-on: ubuntu-latest
     permissions:
       contents: write
