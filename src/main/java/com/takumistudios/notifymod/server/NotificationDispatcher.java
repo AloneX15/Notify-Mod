@@ -47,14 +47,14 @@ public final class NotificationDispatcher {
         if (!visual.isEmpty()) {
             if (ServerPlayNetworking.canSend(player, NotifyNetwork.ShowPayload.TYPE)) {
                 ServerPlayNetworking.send(player, new NotifyNetwork.ShowPayload(new Notification(visual,
-                        n.presentation(), n.message(), n.args(), n.priority(), n.placement(), n.key(), n.durationMs())));
+                        n.presentation(), n.message(), n.args(), n.priority(), n.placement(), n.key(), n.durationMs(), n.style())));
                 sent = true;
             } else {
                 chat = true; // respaldo para clientes sin el mod
             }
         }
         if (chat) {
-            player.sendSystemMessage(NotificationText.chat(n.message(), n.args()));
+            player.sendSystemMessage(NotificationText.chat(n));
             sent = true;
         }
         return sent;

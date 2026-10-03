@@ -25,7 +25,7 @@ import net.minecraft.resources.Identifier;
  * <p>Todo lo que se lee se valida y se limita: un servidor malicioso no puede colgar el cliente.
  */
 public final class NotifyNetwork {
-    public static final int PROTOCOL = 1;
+    public static final int PROTOCOL = 2;
 
     private NotifyNetwork() {
     }
@@ -93,6 +93,7 @@ public final class NotifyNetwork {
             buf.writeUtf(n.key(), Notification.MAX_KEY);
         }
         buf.writeVarInt(n.durationMs());
+        buf.writeUtf(n.style().toJson().toString(), 8192);
     }
 
     static Notification readNotification(FriendlyByteBuf buf) {
@@ -120,9 +121,11 @@ public final class NotifyNetwork {
         Placement placement = enumAt(Placement.values(), buf.readVarInt());
         String key = buf.readBoolean() ? buf.readUtf(Notification.MAX_KEY) : null;
         int duration = buf.readVarInt();
+        var style = com.takumistudios.notifymod.core.NotificationStyle.parse(
+                com.google.gson.JsonParser.parseString(buf.readUtf(8192)).getAsJsonObject());
         // El constructor valida el resto (ids, rangos, longitudes)
         return new Notification(channels, presentation, new Message(text, translate, with), NotificationArgs.of(args),
-                priority, placement, key, duration);
+                priority, placement, key, duration, style);
     }
 
     private static int limit(int count, int max, String what) {

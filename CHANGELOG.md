@@ -2,6 +2,10 @@
 
 ## Sin publicar
 
+- Chat con título y cuerpo verdes; tarjetas superiores derechas con icono, título, panel translúcido y tecla de
+  ocultación. Estilo por plantilla: colores RGB, título, fondo, opacidad, anchura y opciones de icono/sombra/pie.
+  Ejemplos `styled_chat` y `styled_corner`; protocolo visual v2 (requiere actualizar servidor y cliente).
+
 - Wiki es/en con instalación, configuración, permisos, plantillas, presentaciones, disparadores y desarrollo;
   generación estricta con MkDocs, capturas de los tests y despliegue opcional en GitHub Pages.
 

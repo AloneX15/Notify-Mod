@@ -10,7 +10,11 @@ import java.util.regex.Pattern;
  * ids, texto, argumentos y cómo mostrarlo. Se valida al construirla, tanto en el servidor como al recibirla.
  */
 public record Notification(Set<Channel> channels, String presentation, Message message, NotificationArgs args,
-        Priority priority, Placement placement, String key, int durationMs) {
+        Priority priority, Placement placement, String key, int durationMs, NotificationStyle style) {
+    public Notification(Set<Channel> channels, String presentation, Message message, NotificationArgs args,
+            Priority priority, Placement placement, String key, int durationMs) {
+        this(channels, presentation, message, args, priority, placement, key, durationMs, NotificationStyle.DEFAULTS);
+    }
     public static final String MOTD = "notifymod:motd";
     public static final int MIN_DURATION_MS = 500;
     public static final int MAX_DURATION_MS = 120_000;
@@ -21,6 +25,7 @@ public record Notification(Set<Channel> channels, String presentation, Message m
     private static final Pattern KEY = Pattern.compile("[A-Za-z0-9_.:-]{1," + MAX_KEY + "}");
 
     public Notification {
+        style = style == null ? NotificationStyle.DEFAULTS : style;
         Objects.requireNonNull(channels, "channels");
         if (channels.isEmpty()) {
             throw new IllegalArgumentException("La notificación no tiene ningún canal");

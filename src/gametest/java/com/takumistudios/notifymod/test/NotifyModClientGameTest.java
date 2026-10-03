@@ -32,7 +32,41 @@ public class NotifyModClientGameTest implements FabricClientGameTest {
             modelsAndPreload(context, world);
             triggersReachClientAndDisable(context, world);
             deathDeliveryWaitsForRespawn(context, world);
+            styledChatAndCorner(context, world);
         }
+    }
+
+    private static void styledChatAndCorner(ClientGameTestContext context, TestSingleplayerContext world) {
+        world.getServer().runCommand("notify clear");
+        context.runOnClient(client -> {
+            //? if >=26.2 {
+            client.gui.hud.getChat().clearMessages(true);
+            //?} else {
+            /*client.gui.getChat().clearMessages(true);
+            *///?}
+            var key = com.takumistudios.notifymod.client.NotifyModClient.hideCornersKey();
+            if (!key.isUnbound()) throw new AssertionError("default hide key must be unbound on GLFW and SDL");
+            key.setKey(com.mojang.blaze3d.platform.InputConstants.getKey("key.keyboard.o"));
+        });
+        world.getServer().runCommand("notify showcase notifymod:styled_chat");
+        world.getServer().runCommand("notify showcase notifymod:styled_corner");
+        context.waitTicks(10);
+        String problem = context.computeOnClient(client -> {
+            var cards = com.takumistudios.notifymod.client.NotifyModClient.state()
+                    .corner(com.takumistudios.notifymod.core.Placement.TOP_RIGHT);
+            if (cards.isEmpty() || !"MOMENTO REVILL".equals(cards.getFirst().notification().style().title().text()))
+                return "styled card did not reach top right";
+            return hudFailure();
+        });
+        if (problem != null) throw new AssertionError(problem);
+        context.takeScreenshot("notifymod_styled_chat_corner");
+        context.runOnClient(client -> {
+            com.takumistudios.notifymod.client.NotifyModClient.hideCornersKey()
+                    .setKey(com.mojang.blaze3d.platform.InputConstants.UNKNOWN);
+            if (com.takumistudios.notifymod.client.NotifyModClient.hideCornersHint().getString().contains("key.keyboard"))
+                throw new AssertionError("unbound hint exposed internal key name");
+        });
+        world.getServer().runCommand("notify clear");
     }
 
     private static void deathDeliveryWaitsForRespawn(ClientGameTestContext context, TestSingleplayerContext world) {

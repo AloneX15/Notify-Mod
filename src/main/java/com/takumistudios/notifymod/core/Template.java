@@ -15,11 +15,17 @@ import java.util.Set;
  * colocación, texto y límites; al enviarla se completan los argumentos.
  */
 public record Template(String id, Set<Channel> channels, String presentation, Placement placement, Priority priority,
-        Message message, String key, long cooldownMs, int durationMs) {
+        Message message, String key, long cooldownMs, int durationMs, NotificationStyle style) {
+    public Template(String id, Set<Channel> channels, String presentation, Placement placement, Priority priority,
+            Message message, String key, long cooldownMs, int durationMs) {
+        this(id, channels, presentation, placement, priority, message, key, cooldownMs, durationMs, NotificationStyle.DEFAULTS);
+    }
+
     public static final int FORMAT_VERSION = 1;
     public static final int MAX_JSON_CHARS = 64 * 1024;
 
     public Template {
+        style = style == null ? NotificationStyle.DEFAULTS : style;
         channels = Set.copyOf(EnumSet.copyOf(channels));
     }
 
@@ -36,7 +42,7 @@ public record Template(String id, Set<Channel> channels, String presentation, Pl
         }
         return new Notification(finalChannels, presentation, message, args,
                 priorityOverride != null ? priorityOverride : priority,
-                placementOverride != null ? placementOverride : placement, key, durationMs);
+                placementOverride != null ? placementOverride : placement, key, durationMs, style);
     }
 
     /**
@@ -88,7 +94,7 @@ public record Template(String id, Set<Channel> channels, String presentation, Pl
         }
         Priority priority = o.has("priority") ? Priority.parse(o.get("priority").getAsString()) : Priority.NORMAL;
         Placement placement = o.has("placement") ? Placement.parse(o.get("placement").getAsString())
-                : channels.contains(Channel.SHOWCASE) ? Placement.CENTER : Placement.TOP_LEFT;
+                : channels.contains(Channel.SHOWCASE) ? Placement.CENTER : Placement.TOP_RIGHT;
         Message message = message(o.get("message"));
         String key = o.has("key") ? o.get("key").getAsString() : null;
         long cooldown = o.has("cooldown") ? Durations.parseMillis(o.get("cooldown").getAsString()) : 0;
@@ -97,7 +103,7 @@ public record Template(String id, Set<Channel> channels, String presentation, Pl
                 : Notification.defaultDuration(channels);
 
         Template template = new Template(id, channels, presentation, placement, priority, message, key, cooldown,
-                duration);
+                duration, o.has("style") ? NotificationStyle.parse(o.getAsJsonObject("style")) : NotificationStyle.DEFAULTS);
         // Valida el resto de reglas (clave, duración...) construyendo una notificación de prueba
         template.toNotification(NotificationArgs.EMPTY, null, null, null);
         return template;

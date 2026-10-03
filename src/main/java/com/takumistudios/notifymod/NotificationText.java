@@ -2,7 +2,8 @@ package com.takumistudios.notifymod;
 
 import com.takumistudios.notifymod.core.Message;
 import com.takumistudios.notifymod.core.NotificationArgs;
-import net.minecraft.ChatFormatting;
+import com.takumistudios.notifymod.core.Notification;
+import com.takumistudios.notifymod.core.NotificationStyle;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 
@@ -18,9 +19,16 @@ public final class NotificationText {
         return Component.literal(message.resolveLiteral(args));
     }
 
-    /** Formato del canal de chat: un separador dorado y el mensaje. */
-    public static MutableComponent chat(Message message, NotificationArgs args) {
-        return Component.literal("\u00BB ").withStyle(ChatFormatting.GOLD).append(component(message, args));
+    /** Vanilla system message: colored bold heading, blank line and matching body. */
+    public static MutableComponent chat(Notification n) {
+        NotificationStyle s = n.style();
+        MutableComponent title = Component.empty();
+        if (s.showIcon()) title.append(Component.literal("● "));
+        title.append(s.title().translate() && "notifymod.notice.title".equals(s.title().text())
+                ? Component.translatableWithFallback("notifymod.notice.title", "Attention!")
+                : component(s.title(), n.args()));
+        title.withStyle(style -> style.withColor(s.chatColor()).withBold(true));
+        return Component.empty().append(title).append(Component.literal("\n\n"))
+                .append(component(n.message(), n.args()).withStyle(style -> style.withColor(s.chatColor())));
     }
 }
-

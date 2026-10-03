@@ -121,7 +121,7 @@ public final class NotifyCommand {
             if (message != null || parsed.option("key") != null || parsed.option("duration") != null) {
                 n = new Notification(n.channels(), n.presentation(), message != null ? Message.literal(message) : n.message(),
                         n.args(), n.priority(), n.placement(), parsed.option("key") != null ? parsed.option("key") : n.key(),
-                        duration(parsed, n.durationMs()));
+                        duration(parsed, n.durationMs()), n.style());
             }
         } else {
             String message = parsed.message().strip();
@@ -131,7 +131,7 @@ public final class NotifyCommand {
             if (chat == null ? NotifyServer.get().config().defaultMirrorToChat() : chat) {
                 channels.add(Channel.CHAT);
             }
-            n = new Notification(channels, presentation, Message.literal(message), args, priority, placement,
+            n = new Notification(channels, presentation, Message.literal(message), args, priority, placement == null && channels.contains(Channel.HUD) ? Placement.TOP_RIGHT : placement,
                     parsed.option("key"), duration(parsed, Notification.defaultDuration(channels)));
         }
         checkPriority(source, n.priority());

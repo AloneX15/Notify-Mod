@@ -1,0 +1,18 @@
+{
+  "format_version": 1,
+  "channels": [
+    "hud"
+  ],
+  "placement": "top_right",
+  "duration": "15s",
+  "message": "Dennis te la rifaste mucho. Muchas gracias por la ayuda en la misión de hoy.",
+  "style": {
+    "title": "MOMENTO REVILL",
+    "chat_color": "#00CC33",
+    "title_color": "#CC2020",
+    "text_color": "#EE9999",
+    "background_color": "#101010",
+    "background_opacity": 0.65,
+    "width": 240
+  }
+}

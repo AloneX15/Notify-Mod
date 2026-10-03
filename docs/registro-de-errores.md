@@ -9,3 +9,11 @@ Cada error resuelto se anota aquí (norma TakumiStudios): síntoma, causa, soluc
 | 2026-10-03 | `Phase3Test.pistasDeModeloYPrecarga` fallaba con `ClassCastException` | `"loop": "spin"` (texto) se leía con `getAsJsonObject`; los tipos equivocados de Gson se escapaban del parser sin pasar a `IllegalArgumentException` | Forma corta para las animaciones y conversión de los errores de tipo de Gson en `IllegalArgumentException` con mensaje | `TimelineTest.animacionEnFormaCorta`, `TimelineTest.unCampoConOtroTipoDaUnErrorClaro` |
 | 2026-10-03 | Un PNG pequeño que declara 30000×30000 en su cabecera reservaba ~3,6 GB antes de rechazarse | `ImageIO.read` decodificaba la imagen y el tamaño se comprobaba después | Se lee la cabecera con un `ImageReader` y se comprueban lado y memoria antes de decodificar | `SpriteSheetTest.pngConCabeceraGiganteSeRechazaSinReservarMemoria` |
 | 2026-10-03 | Los comandos de disparadores rechazaban ids como `notifymod:player_death` | `StringArgumentType.word` no admite dos puntos | Argumento de id validado y registrado con serializador para cliente/servidor | `TriggerIdArgumentTest.acceptsNamespacedAndNestedIdsAndStopsAtWhitespace`, test de cliente `triggersReachClientAndDisable` |
+
+
+## Tecla sin asignar en SDL (26.3)
+
+Síntoma: el pie de tarjeta mostraba `key.keyboard.-1`. Causa: se usaba el valor GLFW -1 también en SDL,
+cuya tecla desconocida vale 0. Solución: usar `InputConstants.UNKNOWN.getValue()` y normalizar el valor
+antiguo al iniciar. Test de cliente: comprobar que la tecla predeterminada está sin asignar, asignar O para
+la captura y volver a dejarla sin asignar sin mostrar nombres internos. La caché se invalida al reasignar.

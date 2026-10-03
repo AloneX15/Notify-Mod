@@ -1,0 +1,18 @@
+{
+  "format_version": 1,
+  "channels": [
+    "chat"
+  ],
+  "placement": "top_right",
+  "duration": "15s",
+  "message": "Por favor, todos los líderes de cada hermandad asistan a la Sala de Subastas. Eón les entregará una cuchara de la resurrección a cada uno.",
+  "style": {
+    "title": "¡Atención!",
+    "chat_color": "#00CC33",
+    "title_color": "#00CC33",
+    "text_color": "#EE9999",
+    "background_color": "#101010",
+    "background_opacity": 0.65,
+    "width": 240
+  }
+}

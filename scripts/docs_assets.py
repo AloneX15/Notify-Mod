@@ -12,8 +12,9 @@ def main():
     names = {
         "notifymod_phase4_trigger_preview": "phase4-trigger-preview.png",
         "notifymod_phase4_after_respawn": "phase4-after-respawn.png",
+        "notifymod_styled_chat_corner": "styled-chat-corner.png",
     }
-    # Validate the complete input before changing either checked-in asset.
+    # Validate the complete input before changing any checked-in asset.
     selected = {}
     for source, target in names.items():
         matches = sorted(args.screenshots.glob(f"*_{source}.png"))

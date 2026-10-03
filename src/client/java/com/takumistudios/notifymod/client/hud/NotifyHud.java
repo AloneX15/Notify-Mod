@@ -31,9 +31,7 @@ import net.minecraft.util.Util;
  * cada fotograma solo se dibuja.
  */
 public final class NotifyHud implements HudElement {
-    static final int CARD_WIDTH = 170;
     static final int PADDING = 5;
-    static final int ACCENT = 2;
 
     private final ClientNotificationState state;
     private final Supplier<ClientConfig> config;
@@ -164,42 +162,89 @@ public final class NotifyHud implements HudElement {
                 return h;
             }
         }
-        Layout layout = cardLayout(font, active);
+        CardLayout layout = cardLayout(font, active, screenW, screenH);
         float a = active.alpha(now);
-        if (a <= 0.02f) {
-            return layout.height;
-        }
+        if (a <= 0.02f) return layout.height;
         int[] origin = HudLayout.cardOrigin(placement, screenW, screenH, layout.width, layout.height, offset);
         int x = origin[0] + Math.round((1 - a) * 16 * HudLayout.slideDirection(placement));
         int y = origin[1];
-        g.fill(x, y, x + layout.width, y + layout.height, withAlpha(0x101010, a * 0.78f));
-        g.fill(x, y, x + ACCENT, y + layout.height, withAlpha(priorityColor(active.notification().priority()), a));
-        // Barra de tiempo restante
-        int barWidth = Math.round((layout.width - ACCENT) * (1 - active.progress(now)));
-        g.fill(x + ACCENT, y + layout.height - 1, x + ACCENT + barWidth, y + layout.height, withAlpha(0xFFFFFF, a * 0.35f));
-        int color = withAlpha(0xFFFFFF, a);
-        int textX = x + ACCENT + PADDING;
-        for (int i = 0; i < layout.lines.size(); i++) {
-            g.text(font, layout.lines.get(i), textX, y + PADDING + i * font.lineHeight, color);
+        var theme = active.notification().style();
+        g.fill(x, y, x + layout.width, y + layout.height,
+                withAlpha(theme.backgroundColor(), a * (float)theme.backgroundOpacity()));
+        int titleX = x + PADDING;
+        if (theme.showIcon()) {
+            drawNoticeIcon(g, titleX, y + PADDING, withAlpha(theme.titleColor(), a));
+            titleX += 13;
+        }
+        int rowY = y + PADDING;
+        for (var line : layout.title) {
+            g.text(font, line, titleX, rowY, withAlpha(theme.titleColor(), a), theme.shadow());
+            rowY += font.lineHeight;
+        }
+        rowY += 4;
+        for (var line : layout.body) {
+            g.text(font, line, x + PADDING, rowY, withAlpha(theme.textColor(), a), theme.shadow());
+            rowY += font.lineHeight;
+        }
+        if (!layout.hint.isEmpty()) {
+            rowY += 12;
+            for (var line : layout.hint) {
+                g.text(font, line, x + PADDING, rowY, withAlpha(theme.hintColor(), a), theme.shadow());
+                rowY += font.lineHeight;
+            }
         }
         return layout.height;
     }
 
-    private Layout cardLayout(Font font, ActiveNotification active) {
-        if (active.renderCache instanceof Layout cached) {
-            return cached;
+    private record CardLayout(List<FormattedCharSequence> title, List<FormattedCharSequence> body,
+            List<FormattedCharSequence> hint, int width, int height, int screenW, int screenH, String hintKey) {}
+
+    private CardLayout cardLayout(Font font, ActiveNotification active, int screenW, int screenH) {
+        String hintKey = com.takumistudios.notifymod.client.NotifyModClient.hideCornersKey().saveString();
+        if (active.renderCache instanceof CardLayout c && c.screenW == screenW && c.screenH == screenH
+                && c.hintKey.equals(hintKey)) return c;
+        var theme = active.notification().style();
+        int width = Math.max(40, Math.min(theme.width(), screenW - HudLayout.GAP * 2));
+        int textWidth = Math.max(20, width - PADDING * 2);
+        var title = limitedLines(font.split(NotificationText.component(theme.title(), active.notification().args())
+                .withStyle(style -> style.withBold(true)), Math.max(20, textWidth - (theme.showIcon() ? 13 : 0))), 2);
+        var hint = theme.showHideHint() ? limitedLines(font.split(
+                com.takumistudios.notifymod.client.NotifyModClient.hideCornersHint(), textWidth), 2)
+                : List.<FormattedCharSequence>of();
+        int fixedHeight = PADDING * 2 + title.size() * font.lineHeight + 4
+                + (hint.isEmpty() ? 0 : 12 + hint.size() * font.lineHeight);
+        var all = font.split(text(active.notification()), textWidth);
+        int maxLines = Math.max(1, (screenH - HudLayout.GAP * 2 - fixedHeight) / font.lineHeight);
+        var body = List.copyOf(all.subList(0, Math.min(all.size(), maxLines)));
+        if (all.size() > maxLines) {
+            var clipped = new java.util.ArrayList<>(body);
+            clipped.set(clipped.size() - 1, Component.literal("…").getVisualOrderText());
+            body = List.copyOf(clipped);
         }
-        int textWidth = CARD_WIDTH - ACCENT - PADDING * 2;
-        List<FormattedCharSequence> lines = font.split(text(active.notification()), textWidth);
-        int widest = 0;
-        for (FormattedCharSequence line : lines) {
-            widest = Math.max(widest, font.width(line));
-        }
-        int width = Math.min(CARD_WIDTH, widest + ACCENT + PADDING * 2);
-        int height = lines.size() * font.lineHeight + PADDING * 2 - 1;
-        Layout layout = new Layout(List.copyOf(lines), width, height, 1f);
+        var layout = new CardLayout(title, body, hint, width, fixedHeight + body.size() * font.lineHeight, screenW, screenH, hintKey);
         active.renderCache = layout;
         return layout;
+    }
+
+    private static List<FormattedCharSequence> limitedLines(List<FormattedCharSequence> lines, int max) {
+        if (lines.size() <= max) return List.copyOf(lines);
+        var clipped = new java.util.ArrayList<>(lines.subList(0, max));
+        clipped.set(max - 1, Component.literal("…").getVisualOrderText());
+        return List.copyOf(clipped);
+    }
+
+    /** Small pixel ring and exclamation mark, drawn without an external texture. */
+    private static void drawNoticeIcon(GuiGraphicsExtractor g, int x, int y, int color) {
+        g.fill(x + 3, y, x + 7, y + 1, color);
+        g.fill(x + 3, y + 9, x + 7, y + 10, color);
+        g.fill(x, y + 3, x + 1, y + 7, color);
+        g.fill(x + 9, y + 3, x + 10, y + 7, color);
+        g.fill(x + 1, y + 1, x + 3, y + 3, color);
+        g.fill(x + 7, y + 1, x + 9, y + 3, color);
+        g.fill(x + 1, y + 7, x + 3, y + 9, color);
+        g.fill(x + 7, y + 7, x + 9, y + 9, color);
+        g.fill(x + 4, y + 2, x + 6, y + 6, color);
+        g.fill(x + 4, y + 7, x + 6, y + 8, color);
     }
 
     private Component text(Notification n) {

@@ -30,8 +30,8 @@ import net.minecraft.util.Util;
 
 /** Punto de entrada del cliente: red, estado de las notificaciones, capa del HUD y la tecla de ocultar esquinas. */
 public final class NotifyModClient implements ClientModInitializer {
-    /** GLFW_KEY_UNKNOWN: la tecla viene sin asignar para no chocar con otros mods. */
-    private static final int UNBOUND = -1;
+    /** Uses the platform unknown key (GLFW -1, SDL 0). */
+    private static final int UNBOUND = com.mojang.blaze3d.platform.InputConstants.UNKNOWN.getValue();
 
     private static Path configFile;
     private static volatile ClientConfig config = ClientConfig.DEFAULTS;
@@ -114,6 +114,9 @@ public final class NotifyModClient implements ClientModInitializer {
                     Identifier.fromNamespaceAndPath(NotifyMod.MOD_ID, "main"));
             hideCornersKey = KeyMappingHelper.registerKeyMapping(
                     new KeyMapping("key.notifymod.hide_corners", UNBOUND, category));
+            if ("key.keyboard.-1".equals(hideCornersKey.saveString())) {
+                hideCornersKey.setKey(com.mojang.blaze3d.platform.InputConstants.UNKNOWN);
+            }
             ClientTickEvents.END_CLIENT_TICK.register(client -> {
                 while (hideCornersKey.consumeClick()) {
                     safe("cambiar la opción", () -> toggleHideCorners(client));
@@ -125,6 +128,14 @@ public final class NotifyModClient implements ClientModInitializer {
     }
 
     /** El único interruptor del jugador (§6.4): ocultar los avisos de esquina. El centro nunca se oculta. */
+    public static KeyMapping hideCornersKey() { return hideCornersKey; }
+
+    public static Component hideCornersHint() {
+        return hideCornersKey == null || hideCornersKey.isUnbound()
+                ? Component.translatable("notifymod.notice.hide_unbound")
+                : Component.translatable("notifymod.notice.hide_hint", hideCornersKey.getTranslatedKeyMessage());
+    }
+
     public static void toggleHideCorners(Minecraft client) {
         config = config.withHideCornerNotifications(!config.hideCornerNotifications());
         JsonConfigFile.saveAsync(configFile, ClientConfig.write(config), task -> Util.ioPool().execute(task));

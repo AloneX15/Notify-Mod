@@ -8,6 +8,28 @@ import net.minecraft.gametest.framework.GameTestHelper;
 /** Gametests de servidor: ./gradlew :26.3:runGameTest (y con -PcompatPack en la CI). */
 public class NotifyModGameTests {
     @GameTest
+    public void styledNotificationRoundTripsAndFormatsChat(GameTestHelper helper) {
+        var template = com.takumistudios.notifymod.server.NotifyServer.get().templates().get("notifymod:styled_corner");
+        var notification = template.toNotification(com.takumistudios.notifymod.core.NotificationArgs.EMPTY, null, null, true);
+        var buffer = new net.minecraft.network.FriendlyByteBuf(io.netty.buffer.Unpooled.buffer());
+        try {
+            var codec = com.takumistudios.notifymod.network.NotifyNetwork.ShowPayload.CODEC;
+            codec.encode(buffer, new com.takumistudios.notifymod.network.NotifyNetwork.ShowPayload(notification));
+            var decoded = codec.decode(buffer).notification();
+            if (!notification.equals(decoded)) throw helper.assertionException("Style lost during network round trip");
+            var chat = com.takumistudios.notifymod.NotificationText.chat(decoded);
+            if (!chat.getString().contains("MOMENTO REVILL\n\nDennis"))
+                throw helper.assertionException("Missing heading/spacing in chat");
+            var heading = chat.getSiblings().getFirst();
+            if (!heading.getStyle().isBold() || heading.getStyle().getColor().getValue() != 0x00CC33)
+                throw helper.assertionException("Missing chat color/bold title");
+        } finally {
+            buffer.release();
+        }
+        helper.succeed();
+    }
+
+    @GameTest
     public void triggerManagementRequiresAdmin(GameTestHelper helper) {
         var server = helper.getLevel().getServer();
         var source = server.createCommandSourceStack().withPermission(net.minecraft.server.permissions.LevelBasedPermissionSet.GAMEMASTER);

@@ -70,6 +70,8 @@ Probado en la CI junto a Lithium y FerriteCore. Si encuentras un conflicto con o
 /notify cancel <clave|all>  ·  /notify clear  ·  /notify reload  ·  /notify validate  ·  /notify help
 ```
 
+- **Estilo:** chat con título verde y tarjetas con título, icono y panel translúcido. Colores, opacidad y anchura
+  por plantilla; [referencia y ejemplos](docs/es/plantillas.md#estilo-del-chat-y-de-las-tarjetas).
 - **Colocación:** `center`, `top_left`, `top_right`, `bottom_left`, `bottom_right`, `top`, `bottom`.
 - **Prioridad:** `low`, `normal`, `high` (acorta lo que hay en el centro) y `critical` (lo interrumpe y siempre va al
   centro).

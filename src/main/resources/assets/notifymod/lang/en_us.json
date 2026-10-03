@@ -11,5 +11,8 @@
   "notifymod.trigger.error": "Could not perform action: %s",
   "notifymod.example.player_death": "%s died: %s",
   "notifymod.trigger.invalid_id": "Invalid trigger id: %s",
-  "notifymod.trigger.validation": "Notify: %s triggers, %s errors"
+  "notifymod.trigger.validation": "Notify: %s triggers, %s errors",
+  "notifymod.notice.title": "Attention!",
+  "notifymod.notice.hide_hint": "[%s] to hide notifications",
+  "notifymod.notice.hide_unbound": "Bind a key to hide notifications"
 }

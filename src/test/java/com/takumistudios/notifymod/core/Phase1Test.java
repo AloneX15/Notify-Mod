@@ -91,7 +91,7 @@ class Phase1Test {
                 "{\"message\": \"a\", \"placement\": \"izquierda\"}"));
         assertThrows(IllegalArgumentException.class, () -> Template.parse("Mal Id", "{\"message\": \"a\"}"));
         Template simple = Template.parse("ejemplo:hola", "{\"channels\": \"hud\", \"message\": \"Hola {jugador}\"}");
-        assertEquals(Placement.TOP_LEFT, simple.placement());
+        assertEquals(Placement.TOP_RIGHT, simple.placement());
         assertNull(simple.key());
         assertEquals("Hola Steve", simple.message().resolveLiteral(NotificationArgs.of(Map.of("jugador", "Steve"))));
     }
