@@ -1,3 +1,8 @@
 {
-  "modmenu.descriptionTranslation.notifymod": "A data-driven engine for cinematic presentations and on-screen notifications: chat messages, HUD cards and full-screen showcases."
+  "modmenu.descriptionTranslation.notifymod": "A data-driven engine for cinematic presentations and on-screen notifications: chat messages, HUD cards and full-screen showcases.",
+  "key.category.notifymod.main": "Notify Mod",
+  "key.notifymod.hide_corners": "Hide corner notifications",
+  "notifymod.hide_corners.on": "Corner notifications hidden",
+  "notifymod.hide_corners.off": "Corner notifications shown",
+  "notifymod.restart.warning": "The server restarts in %s minutes"
 }

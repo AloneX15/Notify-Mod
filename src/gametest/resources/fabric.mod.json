@@ -6,7 +6,8 @@
   "environment": "*",
   "entrypoints": {
     "fabric-gametest": ["com.takumistudios.notifymod.test.NotifyModGameTests"],
-    "fabric-client-gametest": ["com.takumistudios.notifymod.test.NotifyModClientGameTest"]
+    "fabric-client-gametest": ["com.takumistudios.notifymod.test.NotifyModClientGameTest"],
+    "client": ["com.takumistudios.notifymod.test.MediaPocHud"]
   },
   "depends": {
     "notifymod": "*",

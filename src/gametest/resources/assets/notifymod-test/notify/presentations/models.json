@@ -1,0 +1,36 @@
+{
+  "format_version": 1,
+  "_comment": "Prueba de la fase 3: modelos 3D (ítem, bloque y mob), spritesheet .mcmeta y precarga de imágenes",
+  "duration": 5000,
+  "preload": true,
+  "background": { "type": "dim", "color": "#000000", "opacity": 0.4 },
+  "tracks": [
+    {
+      "type": "model", "time": 0, "item": "minecraft:diamond_sword",
+      "anchor": "center", "offset": [-0.25, 0], "size": [0.2, 0.2],
+      "animation_in": { "type": "pop", "easing": "ease_out_back", "duration": 400 },
+      "loop": { "type": "spin", "period": 3000 }
+    },
+    {
+      "type": "model", "time": 0, "item": "minecraft:grass_block",
+      "anchor": "center", "offset": [0, 0], "size": [0.2, 0.2]
+    },
+    {
+      "type": "model", "time": 0, "entity": "minecraft:zombie",
+      "anchor": "center", "offset": [0.25, 0], "size": [0.3, 0.3],
+      "loop": { "type": "spin", "period": 4000 }
+    },
+    {
+      "type": "texture", "time": 0, "file": "notifymod-test:notify/media/sample.gif",
+      "anchor": "center", "offset": [0, -0.3], "size": [0.15, 0.15]
+    },
+    {
+      "type": "texture", "time": 0, "file": "notifymod-test:notify/media/sprite.png",
+      "anchor": "center", "offset": [0.2, -0.3], "size": [0.15, 0.15]
+    },
+    {
+      "type": "text", "time": 0, "content": "{message}", "anchor": "center", "offset": [0, 0.3], "scale": 1.5
+    }
+  ]
+}
+

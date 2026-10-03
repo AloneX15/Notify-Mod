@@ -1,3 +1,8 @@
 {
-  "modmenu.descriptionTranslation.notifymod": "Motor basado en datos para presentaciones cinemáticas y notificaciones en pantalla: mensajes de chat, tarjetas del HUD y presentaciones a pantalla completa."
+  "modmenu.descriptionTranslation.notifymod": "Motor basado en datos para presentaciones cinemáticas y notificaciones en pantalla: mensajes de chat, tarjetas del HUD y presentaciones a pantalla completa.",
+  "key.category.notifymod.main": "Notify Mod",
+  "key.notifymod.hide_corners": "Ocultar avisos de esquina",
+  "notifymod.hide_corners.on": "Avisos de esquina ocultos",
+  "notifymod.hide_corners.off": "Avisos de esquina visibles",
+  "notifymod.restart.warning": "El servidor se reinicia en %s minutos"
 }

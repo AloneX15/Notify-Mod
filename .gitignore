@@ -36,3 +36,6 @@ Thumbs.db
 
 # Logs locales
 *-log.txt
+
+# Estado local de Copilot en el IDE
+.idea/copilotDiffState.xml

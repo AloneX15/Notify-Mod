@@ -1,0 +1,13 @@
+{
+  "format_version": 1,
+  "_comment": "Aviso de reinicio del servidor. Uso: /notify showcase restart_warning minutos=5",
+  "channels": ["showcase"],
+  "presentation": "notifymod:motd",
+  "placement": "top",
+  "priority": "HIGH",
+  "message": { "translate": "notifymod.restart.warning", "with": ["{minutos}"] },
+  "mirror_to_chat": true,
+  "key": "restart_warning",
+  "cooldown": "10s"
+}
+

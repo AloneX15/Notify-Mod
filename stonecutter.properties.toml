@@ -6,6 +6,7 @@ mod.group = "com.takumistudios.notifymod"
 mod.version = "0.1.0"
 
 deps.fabric_loader = "0.19.5"
+deps.twelvemonkeys = "3.15.2"
 
 ["26.1.2"]
 mod.mc_compat = ">=26.1 <26.2-"

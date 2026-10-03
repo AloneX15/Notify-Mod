@@ -16,6 +16,12 @@ public final class NotifyMod implements ModInitializer {
     @Override
     public void onInitialize() {
         LOGGER.info("Notify Mod {} cargado. Creado por TakumiStudios.", version());
+        try {
+            com.takumistudios.notifymod.network.NotifyNetwork.register();
+            com.takumistudios.notifymod.server.NotifyServer.get().init();
+        } catch (RuntimeException e) {
+            LOGGER.error("Notify Mod no se pudo iniciar del todo; el juego sigue sin sus funciones", e);
+        }
     }
 
     public static String version() {

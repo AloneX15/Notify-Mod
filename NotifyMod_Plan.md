@@ -1,6 +1,6 @@
 # Notify Mod: documento de diseño (Fabric · Minecraft 26.x+)
 
-> **Estado:** Diseño conceptual aprobado. Todavía no hay código.
+> **Estado:** Diseño aprobado. Fases 0 a 3 implementadas (preparación, núcleo, motor de líneas de tiempo y tubería de medios); siguiente: Fase 4 (disparadores).
 > **Nombre:** Notify Mod · **Autor:** TakumiStudios · **modid:** `notifymod` · **Paquete Java:** `com.takumistudios.notifymod` · **Comando:** `/notify`
 > **Tipo:** Framework de interfaz, utilidad de servidor y librería para otros mods.
 > *El motor de presentaciones cinemáticas e interfaces temporales para Minecraft Fabric.*
@@ -378,7 +378,7 @@ Todo lo animado (PNG animado, `.mcmeta`, GIF, WebP y Lottie) se convierte en una
 | WebP | Decodificador **Java puro** (por ejemplo el plugin de TwelveMonkeys) | ⚠ Comprobar licencia, peso y que sirva para WebP animado |
 | Lottie | **Rasterizado previo** de un subconjunto (formas, rellenos, trazos, transformaciones y recortes de trazo) con un renderizador propio o una librería Java pura | ⚠ Evaluar en la Fase 0. Las librerías nativas quedan descartadas |
 
-> **Puerta de decisión (Fase 0):** si Lottie no resulta viable con un coste razonable, se acota a un subconjunto documentado o pasa a la versión 1.1. La decisión es explícita y se anota en la documentación.
+> **Puerta de decisión (Fase 0):** ✅ superada. Lottie entra en la 1.0 acotado a un subconjunto documentado (formas, rellenos, trazos, transformaciones y fotogramas clave); WebP usa TwelveMonkeys. Detalles en `docs/adr/0001-formatos-animados-fase-0.md`.
 
 ### 9.3 Modelos 3D
 
@@ -1032,7 +1032,7 @@ Variables compartidas y fuentes de datos, estado de las escenas activas al entra
 | D3 | ¿Dónde se aloja la wiki? | **GitHub Pages** con un generador de documentación, versionada con el código (la wiki nativa de GitHub no se revisa con pull requests) |
 | D4 | ¿Pueden las escenas dejar moverse al jugador? | Lo decide la prueba de la Fase 0. Si no es viable, solo con el cursor liberado |
 | D5 | ¿Se personalizan también las pantallas vanilla de conexión y de carga? | Fuera de la 1.1; se evalúa después |
-| D6 | ¿Qué librerías de WebP y Lottie? | Tras la Fase 0, con licencias y peso revisados |
+| D6 | ¿Qué librerías de WebP y Lottie? | ✅ **Resuelta en la Fase 0:** WebP con TwelveMonkeys (BSD-3, Java puro); Lottie con un rasterizador propio para un subconjunto documentado. Ver `docs/adr/0001-formatos-animados-fase-0.md` |
 | D7 | ¿Caducidad de la cola de entrada (avisos para jugadores no conectados)? | 24 h por defecto |
 | D8 | ¿Se extrae una librería común con LiveEvents (regla de destellos, validador de expresiones, resolución de audiencias)? | Primero se implementa en cada mod; se extrae cuando haya duplicación real |
 | D9 | ¿Qué se graba del HUD en Replay Mod y Flashback? | Se documenta tras probarlo en la Fase 7 |

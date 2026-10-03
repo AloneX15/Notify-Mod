@@ -1,0 +1,40 @@
+{
+  "format_version": 1,
+  "_comment": "Presentación de prueba (versión del ejemplo cinematic_purga del plan con recursos propios)",
+  "canvas": "16:9",
+  "duration": 7000,
+  "background": { "type": "dim", "color": "#220000", "opacity": 0.6 },
+  "letterbox": { "height": 0.1 },
+  "tracks": [
+    { "type": "sound", "time": 0, "sound": "minecraft:block.note_block.bell", "pitch": 0.8 },
+    {
+      "type": "shape", "time": 200, "name": "banda", "anchor": "center", "offset": [0, 0.18],
+      "size": [1.2, 0.18], "color": "#000000", "color2": "#550000", "opacity": 0.8,
+      "animation_in": { "type": "scale", "amount": 0, "easing": "ease_out_expo", "duration": 500 }
+    },
+    {
+      "type": "texture", "time": 500, "file": "notifymod-test:notify/media/sample.gif",
+      "anchor": "center", "offset": [-0.12, -0.08], "size": [0.25, 0.25],
+      "animation_in": { "type": "pop", "easing": "ease_out_elastic", "duration": 600 }
+    },
+    {
+      "type": "texture", "time": 500, "file": "notifymod-test:notify/media/sample_lottie.json",
+      "anchor": "center", "offset": [0.12, -0.08], "size": [0.25, 0],
+      "animation_in": { "type": "slide_left", "easing": "ease_out_back", "duration": 500 },
+      "loop": { "type": "pulse", "amount": 0.05, "period": 900 }
+    },
+    {
+      "type": "text", "time": 1000, "content": "{message}", "color": "#FF4040", "scale": 2.5,
+      "anchor": "center", "offset": [0, 0.18], "max_width": 0.9,
+      "animation_in": { "type": "slide_right", "easing": "ease_out_expo", "duration": 500 },
+      "animation_out": { "type": "fade", "duration": 400 }
+    },
+    {
+      "type": "text", "time": 1600, "content": "Jugador: {jugador}", "color": "#FFFFFF", "scale": 1,
+      "anchor": "center", "offset": [0, 0.3],
+      "animation_in": { "type": "typewriter", "duration": 800 }
+    }
+  ],
+  "docked": { "omit": ["banda"] }
+}
+

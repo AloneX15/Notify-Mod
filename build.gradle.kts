@@ -52,6 +52,22 @@ dependencies {
     implementation("net.fabricmc:fabric-loader:${sc.properties.get<String>("deps.fabric_loader")}")
     implementation("net.fabricmc.fabric-api:fabric-api:${sc.properties.get<String>("deps.fabric_api")}")
 
+    // Decodificación de WebP (solo cliente). Va dentro del jar (jar-in-jar); include no es transitivo, así que se
+    // listan todos los módulos. Licencia BSD-3-Clause.
+    val twelveMonkeys = sc.properties.get<String>("deps.twelvemonkeys")
+    listOf(
+        "com.twelvemonkeys.imageio:imageio-webp",
+        "com.twelvemonkeys.imageio:imageio-core",
+        "com.twelvemonkeys.imageio:imageio-metadata",
+        "com.twelvemonkeys.common:common-lang",
+        "com.twelvemonkeys.common:common-io",
+        "com.twelvemonkeys.common:common-image",
+    ).forEach {
+        "clientImplementation"("$it:$twelveMonkeys")
+        testImplementation("$it:$twelveMonkeys")
+        include("$it:$twelveMonkeys")
+    }
+
     // Integraciones opcionales: compileOnly aquí + FabricLoader.isModLoaded(...) en ejecución
     // compileOnly("maven.modrinth:<slug>:${sc.properties.get<String>("compat.<slug>")}")
 
