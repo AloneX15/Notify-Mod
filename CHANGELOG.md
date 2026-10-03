@@ -2,6 +2,10 @@
 
 ## Sin publicar
 
+- Fase 4 (primer bloque, todavía incompleta): registro validado de disparadores, eventos de muerte/reaparición,
+  entrada/salida, chat, ciclo de vida y lanzamiento manual; audiencias, filtros, cooldowns y límites; comandos
+  `/notify trigger`; estado persistente y auditoría; ejemplo de muerte desactivado y documentación es/en.
+
 - Fase 0: decodificadores de GIF, WebP (fijo y animado, con TwelveMonkeys) y Lottie (subconjunto) a secuencias de
   fotogramas, con límites de tamaño, fotogramas y memoria. Decisión en `docs/adr/0001-formatos-animados-fase-0.md`.
 - Un WebP dañado ya no puede dejar el decodificador leyendo sin fin.

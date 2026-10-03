@@ -30,6 +30,83 @@ public class NotifyModClientGameTest implements FabricClientGameTest {
             notificationsReachTheHud(context, world);
             timelinePresentationPlays(context, world);
             modelsAndPreload(context, world);
+            triggersReachClientAndDisable(context, world);
+            deathDeliveryWaitsForRespawn(context, world);
+        }
+    }
+
+    private static void deathDeliveryWaitsForRespawn(ClientGameTestContext context, TestSingleplayerContext world) {
+        world.getServer().runCommand("notify trigger enable notifymod-test:death_delivery");
+        try {
+            world.getServer().runCommand("gamemode survival @a");
+            world.getServer().runCommand("kill @a");
+            context.waitTicks(10);
+            if (context.computeOnClient(client -> com.takumistudios.notifymod.client.NotifyModClient.state().center() != null)) {
+                throw new AssertionError("death notification was shown before respawn");
+            }
+            world.getServer().runOnServer(server -> {
+                var player = server.getPlayerList().getPlayers().getFirst();
+                if (!player.isDeadOrDying()) throw new AssertionError("test player did not die");
+                server.getPlayerList().respawn(player, false, net.minecraft.world.entity.Entity.RemovalReason.KILLED);
+            });
+            context.waitTicks(10);
+            String problem = context.computeOnClient(client -> {
+                var center = com.takumistudios.notifymod.client.NotifyModClient.state().center();
+                if (center == null || !"player_death".equals(center.notification().key())) return "missing deferred delivery";
+                return hudFailure();
+            });
+            if (problem != null) throw new AssertionError(problem);
+            context.takeScreenshot("notifymod_phase4_after_respawn");
+        } finally {
+            world.getServer().runCommand("notify trigger disable notifymod-test:death_delivery");
+            world.getServer().runCommand("notify clear");
+            world.getServer().runCommand("gamemode creative @a");
+        }
+    }
+
+    private static void triggersReachClientAndDisable(ClientGameTestContext context, TestSingleplayerContext world) {
+        world.getServer().runCommand("notify clear");
+        world.getServer().runCommand("execute as @a run notify trigger test notifymod:player_death");
+        context.waitTicks(10);
+        context.takeScreenshot("notifymod_phase4_trigger_preview");
+        String problem = context.computeOnClient(client -> {
+            var state = com.takumistudios.notifymod.client.NotifyModClient.state();
+            if (state.center() == null || !"player_death".equals(state.center().notification().key())) {
+                return "trigger test did not reach the client";
+            }
+            if (state.center().notification().args().get("jugador") == null) return "missing event player argument";
+            return hudFailure();
+        });
+        if (problem != null) throw new AssertionError(problem);
+        world.getServer().runCommand("notify clear");
+        world.getServer().runCommand("notify trigger enable notifymod:player_death");
+        try {
+            world.getServer().runOnServer(server -> {
+                var player = server.getPlayerList().getPlayers().getFirst();
+                var manager = com.takumistudios.notifymod.server.NotifyServer.get().triggers();
+                if (!manager.enabled("notifymod:player_death")) throw new AssertionError("enable did not apply");
+                var data = com.takumistudios.notifymod.server.TriggerManager.event(player);
+                data.put("death_message", "Synthetic event");
+                manager.emit(server, "player_death", player, data);
+            });
+            context.waitTicks(10);
+            if (!context.computeOnClient(client -> com.takumistudios.notifymod.client.NotifyModClient.state().center() != null)) {
+                throw new AssertionError("enabled event did not deliver");
+            }
+        } finally {
+            world.getServer().runCommand("notify trigger disable notifymod:player_death");
+            world.getServer().runCommand("notify clear");
+        }
+        context.waitTicks(10);
+        world.getServer().runOnServer(server -> {
+            var player = server.getPlayerList().getPlayers().getFirst();
+            var manager = com.takumistudios.notifymod.server.NotifyServer.get().triggers();
+            if (manager.enabled("notifymod:player_death")) throw new AssertionError("disable did not apply");
+            manager.emit(server, "player_death", player, com.takumistudios.notifymod.server.TriggerManager.event(player));
+        });
+        context.waitTicks(10);
+        if (context.computeOnClient(client -> com.takumistudios.notifymod.client.NotifyModClient.state().center() != null)) {
+            throw new AssertionError("disabled event reached client");
         }
     }
 

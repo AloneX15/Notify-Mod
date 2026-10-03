@@ -20,6 +20,7 @@ public final class NotifyServer {
 
     private final Path configDir = FabricLoader.getInstance().getConfigDir().resolve(NotifyMod.MOD_ID);
     private final TemplateRegistry templates = new TemplateRegistry();
+    private final TriggerManager triggers = new TriggerManager(configDir);
     private final RateLimiter limiter = new RateLimiter(60_000);
     private volatile ServerConfig config = ServerConfig.DEFAULTS;
 
@@ -42,7 +43,14 @@ public final class NotifyServer {
         return limiter;
     }
 
+    public TriggerManager triggers() { return triggers; }
+
     public void init() {
+        net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry.registerArgumentType(
+                net.minecraft.resources.Identifier.fromNamespaceAndPath(NotifyMod.MOD_ID, "trigger_id"),
+                TriggerIdArgument.class,
+                net.minecraft.commands.synchronization.SingletonArgumentInfo.contextFree(TriggerIdArgument::new));
+        triggers.initLifecycle();
         config = ServerConfig.load(configDir.resolve("server.json"));
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
             try {
@@ -51,7 +59,10 @@ public final class NotifyServer {
                 NotifyMod.LOGGER.error("No se pudo registrar /notify", e);
             }
         });
-        ServerLifecycleEvents.SERVER_STARTED.register(server -> safe("cargar plantillas", () -> reloadTemplates(server)));
+        ServerLifecycleEvents.SERVER_STARTED.register(server -> safe("cargar plantillas", () -> {
+            reloadTemplates(server);
+            triggers.emit(server, "server_ready", null, java.util.Map.of());
+        }));
         ServerLifecycleEvents.END_DATA_PACK_RELOAD.register((server, resources, success) -> {
             if (success) {
                 safe("recargar plantillas", () -> reloadTemplates(server));
@@ -71,6 +82,7 @@ public final class NotifyServer {
 
     private void reloadTemplates(MinecraftServer server) {
         templates.reload(server.getResourceManager(), configDir.resolve("managed").resolve("templates"));
+        triggers.reload(server);
     }
 
     /** Cliente obligatorio (§17.2): sin el mod, o con otra versión del protocolo, no se puede entrar. */

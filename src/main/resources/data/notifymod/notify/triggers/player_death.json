@@ -1,0 +1,14 @@
+{
+  "format_version": 1,
+  "type": "player_death",
+  "enabled": false,
+  "template": "notifymod:player_death",
+  "placement": "center",
+  "priority": "HIGH",
+  "args": { "jugador": "$player", "causa": "$death_message" },
+  "cause_delivery": "after_respawn",
+  "cooldown": "10s",
+  "per_player_cooldown": "30s",
+  "max_per_minute": 6,
+  "audience": { "include": [{ "type": "all" }] }
+}

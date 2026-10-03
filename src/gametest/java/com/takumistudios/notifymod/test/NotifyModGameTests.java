@@ -8,6 +8,34 @@ import net.minecraft.gametest.framework.GameTestHelper;
 /** Gametests de servidor: ./gradlew :26.3:runGameTest (y con -PcompatPack en la CI). */
 public class NotifyModGameTests {
     @GameTest
+    public void triggerManagementRequiresAdmin(GameTestHelper helper) {
+        var server = helper.getLevel().getServer();
+        var source = server.createCommandSourceStack().withPermission(net.minecraft.server.permissions.LevelBasedPermissionSet.GAMEMASTER);
+        var dispatcher = server.getCommands().getDispatcher();
+        try {
+            dispatcher.execute("notify trigger enable notifymod:player_death", source);
+            throw helper.assertionException("OP 2 could manage triggers");
+        } catch (com.mojang.brigadier.exceptions.CommandSyntaxException expected) {
+            if (com.takumistudios.notifymod.server.NotifyServer.get().triggers().enabled("notifymod:player_death")) {
+                throw helper.assertionException("Denied command changed trigger state");
+            }
+        }
+        helper.succeed();
+    }
+    @GameTest
+    public void triggersLoadDisabledAndCommandsExist(GameTestHelper helper) {
+        var manager = com.takumistudios.notifymod.server.NotifyServer.get().triggers();
+        var trigger = manager.all().get("notifymod:player_death");
+        if (trigger == null || trigger.enabled() || !manager.errors().isEmpty()) {
+            throw helper.assertionException("Trigger default/load failure: " + manager.errors());
+        }
+        var command = helper.getLevel().getServer().getCommands().getDispatcher().getRoot().getChild("notify").getChild("trigger");
+        for (String action : java.util.List.of("list", "info", "enable", "disable", "set", "test", "fire", "audience")) {
+            if (command == null || command.getChild(action) == null) throw helper.assertionException("Missing trigger command " + action);
+        }
+        helper.succeed();
+    }
+    @GameTest
     public void modIsLoaded(GameTestHelper helper) {
         if (!FabricLoader.getInstance().isModLoaded(NotifyMod.MOD_ID)) {
             throw helper.assertionException("Notify Mod no está cargado");

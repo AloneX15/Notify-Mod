@@ -4,5 +4,12 @@
   "key.notifymod.hide_corners": "Ocultar avisos de esquina",
   "notifymod.hide_corners.on": "Avisos de esquina ocultos",
   "notifymod.hide_corners.off": "Avisos de esquina visibles",
-  "notifymod.restart.warning": "El servidor se reinicia en %s minutos"
+  "notifymod.restart.warning": "El servidor se reinicia en %s minutos",
+  "notifymod.trigger.saved": "Disparador %s guardado",
+  "notifymod.trigger.delivered": "Aviso entregado a %s jugadores",
+  "notifymod.trigger.rate_limit": "Demasiadas acciones seguidas; espera un poco.",
+  "notifymod.trigger.error": "No se pudo ejecutar la acción: %s",
+  "notifymod.example.player_death": "%s ha muerto: %s",
+  "notifymod.trigger.invalid_id": "Id de disparador no válido: %s",
+  "notifymod.trigger.validation": "Notify: %s disparadores, %s con errores"
 }

@@ -1,0 +1,10 @@
+{
+  "format_version": 1,
+  "channels": ["showcase", "chat"],
+  "presentation": "notifymod:motd",
+  "placement": "center",
+  "priority": "HIGH",
+  "message": { "translate": "notifymod.example.player_death", "with": ["{jugador}", "{causa}"] },
+  "key": "player_death",
+  "duration": "6s"
+}

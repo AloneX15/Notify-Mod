@@ -1,0 +1,9 @@
+{
+  "format_version": 1,
+  "type": "player_death",
+  "enabled": false,
+  "template": "notifymod:player_death",
+  "args": { "jugador": "$player", "causa": "$death_message" },
+  "cause_delivery": "after_respawn",
+  "audience": { "include": [{ "type": "involved" }] }
+}

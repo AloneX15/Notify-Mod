@@ -40,6 +40,7 @@ public final class NotifyCommand {
     }
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
+        TriggerCommand.register(dispatcher);
         dispatcher.register(Commands.literal("notify")
                 .requires(s -> NotifyPermissions.check(s, NotifyPermissions.COMMAND, PermissionLevel.GAMEMASTERS))
                 .then(Commands.literal("send")
@@ -205,12 +206,15 @@ public final class NotifyCommand {
 
     private static int validate(CommandSourceStack source) {
         TemplateRegistry templates = NotifyServer.get().templates();
+        TriggerManager triggers = NotifyServer.get().triggers();
         source.sendSuccess(() -> Component.literal("Notify: " + templates.all().size() + " plantillas, "
                 + templates.errors().size() + " con errores"), false);
         for (String error : templates.errors()) {
             source.sendSuccess(() -> Component.literal(" - " + error).withStyle(ChatFormatting.RED), false);
         }
-        return templates.errors().isEmpty() ? 1 : 0;
+        source.sendSuccess(() -> Component.translatable("notifymod.trigger.validation", triggers.all().size(), triggers.errors().size()), false);
+        for (String error : triggers.errors()) source.sendSuccess(() -> Component.literal(error).withStyle(ChatFormatting.RED), false);
+        return templates.errors().isEmpty() && triggers.errors().isEmpty() ? 1 : 0;
     }
 
     private static int help(CommandSourceStack source) {
@@ -219,6 +223,7 @@ public final class NotifyCommand {
                 "/notify hud <mensaje> [placement=top_right] [priority=high] [key=x] [duration=10s] [chat=true]",
                 "/notify showcase <plantilla|presentación> [message=\"...\"] [placement=...] [arg=valor...]",
                 "/notify cancel <clave|all>  ·  /notify clear",
+                "/notify trigger list|info|enable|disable|set|test|fire|audience",
                 "/notify reload  ·  /notify validate")) {
             source.sendSuccess(() -> Component.literal(line), false);
         }

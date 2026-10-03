@@ -4,5 +4,12 @@
   "key.notifymod.hide_corners": "Hide corner notifications",
   "notifymod.hide_corners.on": "Corner notifications hidden",
   "notifymod.hide_corners.off": "Corner notifications shown",
-  "notifymod.restart.warning": "The server restarts in %s minutes"
+  "notifymod.restart.warning": "The server restarts in %s minutes",
+  "notifymod.trigger.saved": "Trigger %s saved",
+  "notifymod.trigger.delivered": "Notification delivered to %s players",
+  "notifymod.trigger.rate_limit": "Too many actions; please wait.",
+  "notifymod.trigger.error": "Could not perform action: %s",
+  "notifymod.example.player_death": "%s died: %s",
+  "notifymod.trigger.invalid_id": "Invalid trigger id: %s",
+  "notifymod.trigger.validation": "Notify: %s triggers, %s errors"
 }
