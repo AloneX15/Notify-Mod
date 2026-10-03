@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "${id}",
+  "version": "${version}",
+  "name": "${name}",
+  "description": "A data-driven engine for cinematic presentations and on-screen notifications: chat messages, HUD cards and full-screen showcases.",
+  "authors": ["TakumiStudios"],
+  "contact": {
+    "homepage": "https://github.com/AloneX15/Notify-Mod",
+    "sources": "https://github.com/AloneX15/Notify-Mod",
+    "issues": "https://github.com/AloneX15/Notify-Mod/issues"
+  },
+  "license": "MIT",
+  "icon": "assets/notifymod/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["com.takumistudios.notifymod.NotifyMod"],
+    "client": ["com.takumistudios.notifymod.client.NotifyModClient"]
+  },
+  "depends": {
+    "fabricloader": ">=${loader}",
+    "minecraft": "${minecraft}",
+    "java": ">=25",
+    "fabric-api": "*"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "id": "notifymod-test",
+  "version": "1.0.0",
+  "name": "Notify Mod GameTests",
+  "environment": "*",
+  "entrypoints": {
+    "fabric-gametest": ["com.takumistudios.notifymod.test.NotifyModGameTests"],
+    "fabric-client-gametest": ["com.takumistudios.notifymod.test.NotifyModClientGameTest"]
+  },
+  "depends": {
+    "notifymod": "*",
+    "fabric-gametest-api-v1": "*"
+  }
+}
